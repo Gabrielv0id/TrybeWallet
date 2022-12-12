@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { submitLogin } from '../redux/actions';
+import { submitLogin, submitCurrrencies } from '../redux/actions';
+import getCurrencies from '../services/currencyAPI';
 
 class Login extends React.Component {
   state = {
@@ -36,10 +37,13 @@ class Login extends React.Component {
     }
   };
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { dispatch, history } = this.props;
     const { email } = this.state;
+    const obj = await getCurrencies();
+    const currencies = Object.keys(obj).filter((element) => element !== 'USDT');
     dispatch(submitLogin(email));
+    dispatch(submitCurrrencies(currencies));
     history.push('/carteira');
   };
 
