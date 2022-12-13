@@ -1,10 +1,11 @@
-import { CURRENCIES_SUBMIT } from '../actions';
+import { CURRENCIES_SUBMIT, EXPENSE_SUBMIT } from '../actions';
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 const INITIAL_STATE = {
   currencies: [], // array de string
   expenses: [], // array de objetos, com cada objeto tendo as chaves id, value, currency, method, tag, description e exchangeRates
   editor: false, // valor booleano que indica de uma despesa está sendo editada
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
+  totalExpense: 0,
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
@@ -13,6 +14,14 @@ const wallet = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       currencies: action.payload,
+    };
+  case EXPENSE_SUBMIT:
+    return {
+      ...state,
+      expenses: [...state.expenses, action.payload],
+      totalExpense: state.totalExpense
+      + (+action.payload.exchangeRates[action.payload.currency].ask
+        * action.payload.value),
     };
   default: return state;
   }
