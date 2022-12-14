@@ -1,9 +1,8 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
-import mockData from './helpers/mockData';
 
 describe('Testando o Login', () => {
   test('Verifica se a tela Home renderiza corretamente', () => {
@@ -66,8 +65,7 @@ describe('testando a wallet', () => {
       },
     };
     const {
-      history,
-      store } = renderWithRouterAndRedux(<App />, { initialEntries }, { initialState });
+      history } = renderWithRouterAndRedux(<App />, { initialEntries }, { initialState });
     const emailEl = screen.getByTestId('email-field');
     const totalEl = screen.getByTestId('total-field');
     const cambioEl = screen.getByTestId('header-currency-field');
