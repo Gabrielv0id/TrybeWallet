@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
+import mockData from './helpers/mockData';
 
 describe('Testando o Login', () => {
   test('Verifica se a tela Home renderiza corretamente', () => {
@@ -99,5 +100,56 @@ describe('testando a wallet', () => {
 
     expect(valorEl.innerText).toBe('26,00');
     expect(descriptionEl.innerText).toBe('lanche');
+
+    test('adicionando despesas', async () => {
+      renderWithRouterAndRedux(<App />, { initialEntries });
+      const cashOptionEl = screen.getByRole('option', { name: 'Dinheiro' });
+      const eatOptionEl = screen.getByRole('option', { name: 'Alimentação' });
+      const USDOptionEl = await screen.findByRole('option', { name: 'USD' });
+      userEvent.type(valorEl, '11');
+      userEvent.type(descriptionEl, 'Onze dólares');
+      userEvent.selectOptions(currencyEl, USDOptionEl);
+      userEvent.selectOptions(methodEl, cashOptionEl);
+      userEvent.selectOptions(tagEl, eatOptionEl);
+      userEvent.click(buttonEl);
+    });
+  });
+  test('Verifica se o botão "excluir" funciona', async () => {
+    const initialEntries = ['/carteira'];
+    const initialState = {
+      wallet: {
+        currencies: Object.keys(mockData),
+        expenses: [
+          {
+            value: '20',
+            description: 'Almoço',
+            currency: 'USD',
+            method: 'Dinheiro',
+            tag: 'Alimentação',
+            id: 0,
+            exchangeRates: mockData,
+          },
+          {
+            value: '5',
+            description: 'Parque de Diversao',
+            currency: 'USD',
+            method: 'Dinheiro',
+            tag: 'Lazer',
+            id: 1,
+            exchangeRates: mockData,
+          },
+        ],
+        editor: false,
+        idToEdit: 0,
+      },
+    };
+    renderWithRouterAndRedux(<App />, { initialEntries, initialState });
+
+    const totalExpensesEl = screen.getByTestId('total-field');
+    const deleteButtonEl = screen.getAllByRole('button', { name: /excluir/i });
+
+    expect(totalExpensesEl).toHaveTextContent('118,83');
+    userEvent.click(deleteButtonEl[0]);
+    expect(totalExpensesEl).toHaveTextContent('23,77');
   });
 });

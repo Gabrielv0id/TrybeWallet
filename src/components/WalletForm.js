@@ -35,14 +35,15 @@ class WalletForm extends Component {
       exchangeRates,
     };
     dispatch(submitExpenses(expenseObj));
-    this.setState({
+    console.log('expenses length: ', expenses.length);
+    this.setState((prevState) => ({
       currency: 'USD',
       description: '',
-      id: expenses.length + 1,
+      id: prevState.id + 1,
       method: 'Dinheiro',
       tag: 'Alimentação',
       value: '',
-    });
+    }));
   };
 
   render() {

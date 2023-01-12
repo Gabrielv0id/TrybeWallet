@@ -1,4 +1,4 @@
-import { CURRENCIES_SUBMIT, EXPENSE_SUBMIT } from '../actions';
+import { CURRENCIES_SUBMIT, EXPENSE_SUBMIT, DELETE_EXPENSE } from '../actions';
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 const INITIAL_STATE = {
   currencies: [], // array de string
@@ -22,6 +22,12 @@ const wallet = (state = INITIAL_STATE, action) => {
       totalExpense: state.totalExpense
       + (+action.payload.exchangeRates[action.payload.currency].ask
         * action.payload.value),
+    };
+  case DELETE_EXPENSE:
+    return {
+      ...state,
+      expenses: state.expenses.filter(({ id }) => id !== action.payload),
+      totalExpense: Math.abs(state.totalExpense - (+action.amount)),
     };
   default: return state;
   }
