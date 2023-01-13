@@ -106,8 +106,8 @@ describe('testando a wallet', () => {
       const cashOptionEl = screen.getByRole('option', { name: 'Dinheiro' });
       const eatOptionEl = screen.getByRole('option', { name: 'Alimentação' });
       const USDOptionEl = await screen.findByRole('option', { name: 'USD' });
-      userEvent.type(valorEl, '11');
-      userEvent.type(descriptionEl, 'Onze dólares');
+      userEvent.type(valorEl, '5');
+      userEvent.type(descriptionEl, 'cinco dólares');
       userEvent.selectOptions(currencyEl, USDOptionEl);
       userEvent.selectOptions(methodEl, cashOptionEl);
       userEvent.selectOptions(tagEl, eatOptionEl);
